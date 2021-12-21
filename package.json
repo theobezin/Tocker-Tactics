@@ -12,6 +12,7 @@
   "dependencies": {
     "discord": "^0.8.2",
     "discord.js": "^12.5.3",
+    "discordjs-button-embed-pagination": "^4.0.1",
     "events": "^3.3.0",
     "express": "^4.17.2",
     "leaguejs": "^2.2.3",

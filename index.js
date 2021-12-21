@@ -29,8 +29,8 @@ client.on("message", async (message) => {
     embed.addFields(
       { name: 'help', value: 'Display the list of commands' },
       { name: 'player', value: ':player player_name | Get global informations about a player' },
-      {name: 'traits', value: 'Display the list of all traits available in TFT Set 6'},
-      {name: 'champions', value: 'Display the list of all champions available in TFT Set 6'},)
+      { name: 'traits', value: 'Display the list of all traits available in TFT Set 6' },
+      { name: 'champions', value: 'Display the list of all champions available in TFT Set 6' })
     embed.setFooter(`${client.user.username} by Sadeuh`, client.user.displayAvatarURL());
     message.channel.send(embed)
   }
@@ -93,7 +93,7 @@ client.on("message", async (message) => {
                 { name: '% of top 4', value: 'Soon...', inline: true },
                 { name: '\u200B', value: '\u200B' },
                 { name: 'HYPERROLL', value: "** **" },
-                { name: 'Rank', value: rankHyperroll },
+                { name: 'Rank', value: rankHyperroll  },
                 { name: 'Wins', value: winsHyperroll, inline: true }
               )
 
@@ -124,6 +124,7 @@ client.on("message", async (message) => {
     const response = await fetch(url);
     const result = await response.json();
     const champions = result.sets[6].champions
+    console.log(champions.length)
 
     const embed = new Discord.MessageEmbed();
     embed.setColor("#216e00")
@@ -155,7 +156,55 @@ client.on("message", async (message) => {
     message.channel.send(embed2)
     embed3.setFooter(`${client.user.username} by Sadeuh`, client.user.displayAvatarURL());
     message.channel.send(embed3)
-    
+
+
+
+
+  }
+
+  if (message.content.startsWith(`${prefix}champion`)) {
+    var name = ""
+    console.log(name)
+
+    for (var n in args) {
+      name = name + args[n]
+      console.log(name)
+    }
+
+    const url = "https://raw.communitydragon.org/latest/cdragon/tft/en_us.json";
+    const response = await fetch(url);
+    const result = await response.json();
+    const champions = result.sets[6].champions
+
+
+    for (var c in champions) {
+      console.log(champions[c].name.toLowerCase())
+      console.log(name)
+      var HPINFO = champions[c].stats.hp + " / " + Math.trunc(champions[c].stats.hp*1.8) + " / " + Math.trunc((champions[c].stats.hp*1.8)*1.8)
+      var ManaInfo = champions[c].stats.initialMana + " (" + champions[c].stats.mana + " max.)"
+      var DamageInfo = champions[c].stats.damage + " / " + Math.trunc(champions[c].stats.damage*1.8) + " / " + Math.trunc((champions[c].stats.damage*1.8)*1.8)
+      if (champions[c].name.toLowerCase().replace(/\s/g, "") == name) {
+        console.log("oui")
+        const embed = new Discord.MessageEmbed();
+        embed.setColor("#216e00")
+        embed.setTitle(champions[c].name)
+        embed.addFields(
+                { name: 'Cost', value: champions[c].cost , inline: true},
+                { name: 'HP', value: HPINFO , inline: true},
+                { name: 'Mana', value: ManaInfo , inline: true},
+                { name: 'Armor', value: champions[c].stats.armor , inline: true},
+                { name: 'Magic Resist', value: champions[c].stats.magicResist , inline: true},
+                { name: 'Damage', value: DamageInfo , inline: true},
+                { name: 'Attack speed', value: champions[c].stats.attackSpeed.toFixed(2) , inline: true},
+                { name: 'Crit rate', value: champions[c].stats.critChance*100 + "%" , inline: true},
+                { name: 'Range', value: champions[c].stats.range , inline: true},
+
+              )
+        embed.setImage(`https://raw.communitydragon.org/latest/game/assets/ux/tft/championsplashes/tft6_${champions[c].name.toLowerCase().replace(/\s/g, "").replace(".", "")}.tft_set6.png`)
+        embed.setFooter(`${client.user.username} by Sadeuh`, client.user.displayAvatarURL());
+        message.channel.send(embed)
+      }
+    }
 
   }
 
@@ -188,6 +237,8 @@ client.on("message", async (message) => {
     message.channel.send(embed2)
 
   }
+
+
 
 })
 
